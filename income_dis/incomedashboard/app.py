@@ -2,6 +2,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import plotly.graph_objs as go
+from dash.dependencies import Input, Output
 import plotly.tools as tls
 import pandas as pd
 from plotly.graph_objs._box import Box
@@ -10,9 +11,9 @@ import numpy as np
 
 from disparities import df_inc, GDc
 
-data_ch = (go.Choropleth(locations=GDc[GDc['year'] == '2000']['index'],
+data_ch = (go.Choropleth(locations=GDc[GDc['year'] == '2000']['code'],
                          z=GDc[GDc['year'] == '2000']['gini'],
-                         text=GDc['index'],
+                         text=GDc[GDc['year'] == '2000']['index'],
                          marker=go.choropleth.Marker(
                              line=go.choropleth.marker.Line(color='rgb(180,180,180)', width=0.5))),)
 
@@ -26,7 +27,7 @@ v.reset_index(inplace=True)
 trace3 = dict(x=sorted(list(v['year'].unique())), y=GDc.groupby(['year'])['gini'].median(), type='line')
 
 
-def box_contin(x):
+def bar_contin(x):
     res = [go.Bar(x=GDc[GDc['continents'] == x]['year'],
                   y=GDc[GDc['continents'] == x]['gini'],
                   text=GDc[GDc['continents'] == x]['index'])]
@@ -44,7 +45,7 @@ layout_ch = dict(title='GINI index worldwide in 2000', showlegend=True, legend=G
 
 
 def lay_contin(x):
-    layout1 = dict(title='Gini coefficient ' + str(x))
+    layout1 = dict(title='Gini coefficient ' + str(x), barmode='stack')
     return layout1
 
 
@@ -52,12 +53,12 @@ fig = dict(data=data_ch, layout=layout_ch)
 
 figt = dict(data=data3, layout=layout)
 
-fig1 = dict(data=box_contin('South America'), layout=lay_contin('South America'))
-fig2 = dict(data=box_contin('Australia'), layout=lay_contin('Australia'))
-fig3 = dict(data=box_contin('Europe'), layout=lay_contin('Europe'))
-fig4 = dict(data=box_contin('North America'), layout=lay_contin('North America'))
-fig5 = dict(data=box_contin('Asia'), layout=lay_contin('Asia'))
-fig6 = dict(data=box_contin('Africa'), layout=lay_contin('Africa'))
+fig1 = dict(data=bar_contin('South America'), layout=lay_contin('South America'))
+fig2 = dict(data=bar_contin('Australia'), layout=lay_contin('Australia'))
+fig3 = dict(data=bar_contin('Europe'), layout=lay_contin('Europe'))
+fig4 = dict(data=bar_contin('North America'), layout=lay_contin('North America'))
+fig5 = dict(data=bar_contin('Asia'), layout=lay_contin('Asia'))
+fig6 = dict(data=bar_contin('Africa'), layout=lay_contin('Africa'))
 
 app = dash.Dash()
 

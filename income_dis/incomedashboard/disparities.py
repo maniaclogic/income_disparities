@@ -40,14 +40,21 @@ df2['average age billionaires'] = [int(i) for i in df2['average age billionaires
 GD = gini.transpose().dropna(1, how='all')
 
 d = {'Argentina': 'South America', 'Australia': 'Australia', 'Austria': 'Europe', 'Belgium': 'Europe', 'Brazil': 'South America', 'Canada': 'North America', 'Chile': 'South America', 'China': 'Asia', 'Colombia': 'South America', 'Cyprus': 'Asia', 'Czech Rep.': 'Europe', 'Denmark': 'Europe', 'Egypt': 'Africa', 'France': 'Europe', 'Germany': 'Europe', 'Greece': 'Europe', 'Hong Kong, China': 'Asia', 'Iceland': 'Europe', 'India': 'Asia', 'Indonesia': 'Asia', 'Ireland': 'Europe', 'Israel': 'Asia', 'Italy': 'Europe', 'Japan': 'Asia', 'Kazakhstan': 'Asia', 'Korea Rep.': 'Asia', 'Kuwait': 'Asia', 'Lebanon': 'Asia', 'Liechtenstein': 'Europe', 'Malaysia': 'Asia', 'Mexico': 'North America', 'Monaco': 'Europe', 'Netherlands': 'Europe', 'New Zealand': 'Australia', 'Norway': 'Europe', 'Oman': 'Asia', 'Philippines': 'Asia', 'Poland': 'Europe', 'Portugal': 'Europe', 'Romania': 'Europe', 'Russia':'Europe', 'Saudi Arabia': 'Asia', 'Serbia': 'Europe', 'Singapore': 'Asia', 'South Africa': 'Africa', 'Spain': 'Europe', 'Sweden': 'Europe', 'Switzerland': 'Europe', 'Taiwan': 'Asia', 'Thailand': 'Asia', 'Turkey': 'Asia', 'Ukraine': 'Europe', 'United Arab Emirates': 'Asia', 'United Kindom': 'Europe', 'United States': 'North America', 'Venezuela': 'South America'}
+a = {'Argentina': 'ARG', 'Australia':'AUS', 'Austria':'AUT', 'Belgium':'BEL', 'Brazil':'BRA', 'Canada':'CAN', 'Chile':'CHL', 'China':'CHN', 'Colombia':'COL', 'Cyprus':'CYP', 'Czech Republic':'CZE', 'Denmark':'DNK', 'Egypt':'EGY', 'France':'FRA', 'Germany':'DEU', 'Greece':'GRC', 'Hong Kong, China':'CHN', 'Iceland':'ISL', 'India':'IND', 'Indonesia':'IDN', 'Ireland':'IRL', 'Israel':'ISR', 'Italy':'ITA', 'Japan':'JPN', 'Kazakhstan':'KAZ', 'Korea Rep.':'KOR','Kuwait':'KWT', 'Lebanon':'LBN', 'Liechtenstein':'LIE', 'Malaysia':'MYS', 'Mexico':'MEX', 'Monaco':'MCO', 'Netherlands':'NLD', 'New Zealand':'NZL', 'Norway':'NOR', 'Oman':'OMN', 'Phillippines':'PHL', 'Poland':'POL', 'Portugal':'PRT', 'Romania':'ROU', 'Russia':'RUS', 'Saudi Arabia':'SAU', 'Serbia':'SRB', 'Singapore':'SGP', 'South Africa':'ZAF', 'Spain':'ESP', 'Sweden':'SWE', 'Switzerland': 'CHE', 'Taiwan':'TWN', 'Thailand':'THA', 'Turkey':'TUR', 'Ukrain':'UKR', 'UnitedArab Emirates':'ARE', 'United Kingdom':'GBR', 'United States':'USA', 'Venezuela':'VEN'}
 d = pd.DataFrame(data=d, index=range(len(d))).transpose()[0]
+a = pd.DataFrame(data=a, index=range(len(a))).transpose()[0]
 df = pd.DataFrame(d)
+a = pd.DataFrame(a)
 df.columns = ['continents']
+a.columns=['code']
 df_inc = df_inc.merge(df, left_index=True, right_index=True).dropna()
+df_inc = df_inc.merge(a,left_index=True, right_index=True)
 GDc = pd.DataFrame(data={'gini':GD.stack()}).reset_index()
 GDc = GDc.rename(columns={'GINI index': 'country', 'level_0': 'year'})
 GDc.set_index(['country'], inplace=True)
-GDc = GDc.merge(df, left_index=True, right_index=True).dropna().reset_index()
+GDc = GDc.merge(a, left_index=True, right_index=True).reset_index()
+GDc.set_index(['index'], inplace=True)
+GDc = GDc.merge(df, left_index=True, right_index=True).reset_index()
 
 GD_list = list(GD.transpose().index)
 GDt = GD.transpose().reset_index()
