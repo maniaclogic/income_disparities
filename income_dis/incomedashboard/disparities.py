@@ -58,3 +58,7 @@ GDc = GDc.merge(df, left_index=True, right_index=True).reset_index()
 
 GD_list = list(GD.transpose().index)
 GDt = GD.transpose().reset_index()
+
+df = df_inc[['year', '%inc_highest20', '%inc_second20', '%inc_third20','%inc_fourth20','%inc_low20', 'continents']]
+df.reset_index(inplace=True)
+df = df.dropna()
