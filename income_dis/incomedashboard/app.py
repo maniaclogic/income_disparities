@@ -139,10 +139,10 @@ app.layout = html.Div([
         dcc.Markdown('''
         ### Boxplots, Swamplots and Statistics
         Boxplots are a statistical way to visualize data to quickly analyze its skew, median, spread (variance) and determine outliers.
-        You can easily tell all the important data points with it. Just by hovering over the overlayed swarmplot we can find the min and max value in this dataset. Which are Romania in 1989 and South Africa in 2006 respectively.
+        Overlayed with a swarmplot, it enables us to quickly distinguish all the important data points. Here for example we can find the min and max value in this dataset, Romania in 1989 and South Africa in 2006 respectively.
         (Hence, the choice of Lorenz curves.)
-        We also see an interesting development of a narrowing in the spread of data in recent years. The median for each country since 1993 has consistently been under 50, 
-        suggesting that the world as a whole is doing pretty good in terms of income distribution. Please note, however, that we have a lot more data points from Europe available in those years.
+        We also see an interesting development of a narrowing in the spread of data in recent years. The median for each year since 1993 has consistently a value under 50, 
+        suggesting that the world as a whole is relatively equal in terms of income distribution. Please note, however, that we have a lot more data points from Europe available in those years, Giving grounds to reason that it is the European countries that have a more equal distribution of income among high and low earners.
         Comparing the continents in general South American countries consistently have higher Gini indices than European countries. African countries as a whole have high values as well, with the exception of Egypt, which consistently returns values in the 30 range.
         Asian, Australian and North American countries fall somewhere in the second and third quantile of the data.
         '''.replace('  ', ''),
