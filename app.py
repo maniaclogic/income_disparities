@@ -232,6 +232,3 @@ def bar_grap(year):
     p_fig = dict(data=[trace], layout=layout)
 
     return p_fig
-
-if __name__ == '__main__':
-	app.run_server()
