@@ -1,6 +1,6 @@
 import dash
-import dash_core_components as dcc
-import dash_html_components as html
+from dash import dcc
+from dash import html
 from dash.dependencies import Input, Output
 
 import plotly.graph_objs as go
@@ -9,8 +9,8 @@ import plotly.graph_objs as go
 from disparities import GDt, GDc, df
 
 
-v = GDc[['continents', 'gini', 'index', 'year']].dropna().set_index('continents')
-trace1 = dict(x=v['year'], y=v['gini'], text=v['index'], type='scatter', mode='markers',
+v = GDc.dropna().set_index('continents')
+trace1 = dict(x=v['year'], y=v['gini'], text=v.index, type='scatter', mode='markers',
               transforms=[dict(type='groupby', groups=v.index)])
 v = v.reset_index().set_index('year')
 trace2 = dict(x=v.index, y=v['gini'], text=v['continents'], type='box',
@@ -38,7 +38,7 @@ figt = dict(data=data3, layout=layout)
 figrom = dict(data=data2, layout=layout1)
 figsa = dict(data=data1, layout=layout2)
 
-app = dash.Dash(__name__)
+app = dash.Dash(__name__, external_stylesheets=['https://codepen.io/chriddyp/pen/bWLwgP.css'])
 
 app.layout = html.Div([
     html.Div([
@@ -62,7 +62,7 @@ app.layout = html.Div([
     If you want to have a closer look at different years, you may utilize the dropdown next to it.
     '''.replace('  ', ''),
         className='container',
-        containerProps={'style': {'maxWidth': '650px'}}
+        style={'maxWidth': '650px'}
 )
     ], className='five columns offset-by-one column'),
     html.Div([
@@ -83,7 +83,7 @@ app.layout = html.Div([
         since they contribute to the population count but don't generate income.
         '''.replace('  ', ''),
                     className='container',
-                     containerProps={'style':{'maxWidth': '650px'}})
+                     style={'maxWidth': '650px'})
     ], className='five columns'),
 
     html.Div([
@@ -124,7 +124,8 @@ app.layout = html.Div([
         in that year. The Gini Index is nothing other than the Gini coeffcient * 100, therefore normalizing the values to percentages.
 
         '''.replace('  ', ''), className='container',
-                                containerProps={'style':{'maxWidth':'650px'}})
+                                style={'maxWidth':'650px'}
+                                )
     ],className='three columns'),
     html.Div([
 
@@ -150,21 +151,15 @@ app.layout = html.Div([
         Asian, Australian and North American countries fall approximately between the second and the third quartile of the data.
         '''.replace('  ', ''),
                      className='container',
-                     containerProps={'style':{'maxWidth':'2400px'}})
+                     style={'maxWidth':'2400px'})
     ], className='twelve columns'),
 
 
     html.Div([
     dcc.Markdown('''
     ***
-    ***
-    ***
-    ***
     ###### Build in Dash with data from Gapminder
     This application was written in Python with the Dash framework.
-    Dash simplifies the server logic, API calls, CSS,
-    HTML, and Javascript, that is usually required to produce a rich web
-    application, for python users.
 
     Gapminder is an independent Swedish foundation with no political,
     religious or economic affiliations. Gapminder is a fact tank, not a think tank.
@@ -173,24 +168,14 @@ app.layout = html.Div([
     aspiring to make the world understandable based on reliable statistics.
     Gapminder promotes a fact-based worldview everyone can understand.
 
-    [Check out Dash](https://plot.ly/)
-
-    [Check out Gapminder](https://www.gapminder.org)
-
-    [Source Code](https://github.com/maniaclogic/income_disparities/blob/master/income_dis/incomedashboard/app.py)
-    ***
-    ***
+    [&rarr; Check out Dash &larr;](https://plot.ly/)  &nbsp; [&rarr; Check out Gapminder &larr;](https://www.gapminder.org) &nbsp; [&rarr; Source Code &larr;](https://github.com/maniaclogic/income_disparities/blob/master/income_dis/incomedashboard/app.py)
     ***
     '''.replace('  ', ''),
         className='container',
-        containerProps={'style': {'maxWidth': '800px'}}
-)], className='offset-by-seven columns')
+        style={'maxWidth': '800px', 'place-items': 'center'}
+)], className='ten columns')
 
 ], className='row')
-
-app.css.append_css({
-    'external_url': 'https://codepen.io/chriddyp/pen/bWLwgP.css'
-})
 
 COUNT = 0
 
@@ -198,15 +183,15 @@ COUNT = 0
             [Input('choro-update', 'n_intervals')])
 def update_choro(n):
 
-    yearls =sorted(list(GDc['year'].unique())[:-1])[1:]
+    yearls =sorted(list(GDc['year'].unique()))
     global COUNT
 
     if COUNT >= len(yearls):
-        COUNT = 0
+        COUNT=0
         year = yearls[COUNT]
         data_ch = (go.Choropleth(locations=GDc[GDc['year'] == year]['code'],
                                  z=GDc[GDc['year'] == year]['gini'],
-                                 text=GDc[GDc['year'] == year]['index'],
+                                 text=GDc[GDc['year'] == year].index,
                                  marker=go.choropleth.Marker(
                                      line=go.choropleth.marker.Line(color='rgb(180,180,180)', width=0.5))),)
 
@@ -219,7 +204,7 @@ def update_choro(n):
         year = yearls[COUNT]
         data_ch = (go.Choropleth(locations=GDc[GDc['year'] == year]['code'],
                                  z=GDc[GDc['year'] == year]['gini'],
-                                 text=GDc[GDc['year'] == year]['index'],
+                                 text=GDc[GDc['year'] == year].index,
                                  marker=go.choropleth.Marker(
                                      line=go.choropleth.marker.Line(color='rgb(180,180,180)', width=0.5))),)
 
@@ -248,5 +233,5 @@ def bar_grap(year):
 
     return p_fig
 
-
-
+if __name__ == '__main__':
+	app.run_server()
